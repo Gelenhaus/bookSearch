@@ -1,9 +1,9 @@
 const { User } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
-
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
+
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
@@ -43,8 +43,7 @@ const resolvers = {
             return { token, user };
         },
 
-        //should this not be findByIdAndUpdate????
-        saveBook: async (parent, { bookData }, context) => {
+        saveBook: async (parent, { book }, context) => {
             if (context.user) {
                 const updatedUserBookList = await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { savedBooks: book } }, { new: true }).populate('savedBooks');
                 return updatedUserBookList;
