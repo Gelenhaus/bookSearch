@@ -1,5 +1,6 @@
-const { AuthenticationError } = require('apollo-server-express');
 const { User } = require('../models');
+const { AuthenticationError } = require('apollo-server-express');
+
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -41,9 +42,11 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
+
+        //should this not be findByIdAndUpdate????
         saveBook: async (parent, { bookData }, context) => {
             if (context.user) {
-                const updatedUserBookList = await User.findByIdAndUpdate({ _id: context.user._id }, { $push: { savedBooks: bookData } }, { new: true }).populate('savedBooks');
+                const updatedUserBookList = await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { savedBooks: book } }, { new: true }).populate('savedBooks');
                 return updatedUserBookList;
             }
 
