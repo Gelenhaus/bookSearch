@@ -6,13 +6,14 @@ const path = require('path');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
-
+const app = express();
 
 const PORT = process.env.PORT || 3001;
-const app = express();
+
 
 
 const startServer = async () => {
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -41,8 +42,8 @@ app.get('*', (req, res) => {
 });
 
 db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
-  });
+  app.listen(PORT, () =>
+    console.log(`API server running on port ${PORT}!`)
+  );
 });
 
